@@ -3,13 +3,15 @@ using System;
 
 namespace Insanity.Scripts.Player
 {
-    // Code-Autoren, bitte bei änderungen Eintragen
+    // Code-Autoren; Bitte bei Änderungen eintragen
     // CODED BY FREDEUN
     //
     public partial class Player : CharacterBody2D
     {
         [Export] private float _speed = 300.0f;
         [Export] private float _jumpVelocity = -400.0f;
+
+        private Vector2 direction;
     
         public override void _PhysicsProcess(double delta)
         {
@@ -29,7 +31,7 @@ namespace Insanity.Scripts.Player
     
             // Get the input direction and handle the movement/deceleration.
             // As good practice, you should replace UI actions with custom gameplay actions.
-            Vector2 direction = Input.GetVector("left", "right", "up", "down");
+            direction = Input.GetVector("left", "right", "up", "down");
             if (direction != Vector2.Zero)
             {
                 velocity.X = direction.X * _speed;
@@ -41,6 +43,13 @@ namespace Insanity.Scripts.Player
     
             Velocity = velocity;
             MoveAndSlide();
+        }
+        public override void _Process(double delta)
+        {
+            if (direction.X != 0)
+            {
+                GetNode<Sprite2D>("Sprite2D").FlipH = direction.X < 0;
+            }
         }
     }
 }
